@@ -65,6 +65,15 @@ body {
   align-items: center;
 }
 
+.header .brand::after {
+  content: "by Aysel Mammadova";
+  font-size: 0.62rem;
+  font-weight: 400;
+  opacity: 0.75;
+  margin-left: 10px;
+  white-space: nowrap;
+}
+
 .header .home-btn {
   color: white;
   text-decoration: none;
@@ -96,6 +105,20 @@ body {
   color: white;
   font-size: 2rem;
   font-weight: 800;
+  flex-direction: column;
+}
+
+.hero-header .brand-center .brand-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.hero-header .brand-center::after {
+  content: "by Aysel Mammadova";
+  font-size: 0.75rem;
+  font-weight: 400;
+  opacity: 0.8;
 }
 
 .hero-header .brand-center img {

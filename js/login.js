@@ -2,10 +2,6 @@
 // GeoSphere - Giriş (Login) Sistemi
 // ============================================
 
-// Müəllimin sabit girişi (özün dəyişə bilərsən)
-const TEACHER_USERNAME = "muellim";
-const TEACHER_PASSWORD = "geosphere2026";
-
 async function login() {
   const username = document.getElementById("username").value.trim();
   const password = document.getElementById("password").value.trim();
@@ -18,9 +14,14 @@ async function login() {
     return;
   }
 
-  // 1. Müəllim girişi yoxlanır
-  if (username === TEACHER_USERNAME && password === TEACHER_PASSWORD) {
+  // 1. Müəllim girişi - təhlükəsiz RPC funksiyası ilə yoxlanır
+  const { data: teacherData } = await supabaseClient
+    .rpc("check_teacher_login", { p_username: username, p_password: password })
+    .maybeSingle();
+
+  if (teacherData) {
     sessionStorage.setItem("role", "teacher");
+    sessionStorage.setItem("teacherName", teacherData.full_name);
     window.location.href = "teacher.html";
     return;
   }
