@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GeoSphere Admin</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+  <header class="header">
+    <div class="brand"><img src="images/logo.png" class="logo-icon" alt="GeoSphere"> GeoSphere Admin</div>
+    <a href="teacher.html" class="home-btn">🏠 Müəllim paneli</a>
+  </header>
+
+  <div class="admin-box">
+
+    <h1>📁 Yeni Bölmə Yarat</h1>
+
+    <h3>Bölmənin adı</h3>
+    <input id="sectionName" placeholder="Məsələn: Fiziki coğrafiya">
+
+    <button onclick="createSection()">📁 Bölmə yarat</button>
+    <p id="sectionMessage"></p>
+
+    <hr>
+
+    <h1>📚 Yeni Mövzu Yarat</h1>
+
+    <h3>📁 Bölmə</h3>
+    <select id="lessonSection">
+      <option value="">Yüklənir...</option>
+    </select>
+
+    <h3>📖 Mövzunun adı</h3>
+    <input id="lessonName" placeholder="Mövzunun adını yaz">
+
+    <h3>🎬 Dərs videosu</h3>
+    <input id="lessonVideo" placeholder="YouTube Embed linki">
+
+    <h3>📄 PDF materialı</h3>
+    <input type="file" id="lessonPdf" accept="application/pdf">
+
+    <button onclick="createLesson()">📚 Mövzunu yarat</button>
+    <p id="lessonMessage"></p>
+
+    <h3 style="margin-top:24px;">📋 Mövcud mövzular</h3>
+    <div id="lessonsListContainer" style="margin-top:8px;">
+      <p>Yüklənir...</p>
+    </div>
+
+    <hr>
+
+    <h1>📝 Yeni Test Sualı Yarat</h1>
+
+    <h3>📖 Mövzu</h3>
+    <select id="questionLesson">
+      <option value="">Yüklənir...</option>
+    </select>
+
+    <h3>❓ Sual tipi</h3>
+    <select id="questionType" onchange="toggleQuestionType()">
+      <option value="choice">Variantlı (5 seçim)</option>
+      <option value="written">Yazılı cavab</option>
+    </select>
+
+    <h3>❓ Sual mətni (istəyə bağlı, şəkil kifayət edərsə boş buraxa bilərsən)</h3>
+    <input id="questionText" placeholder="Sualı yaz (məcburi deyil)">
+
+    <h3>🖼 Şəkil (istəyə bağlı)</h3>
+    <input type="file" id="questionImage" accept="image/*">
+
+    <div id="choiceFields">
+
+      <h3>Cavablar</h3>
+      <input id="answerA" placeholder="A variantı">
+      <input id="answerB" placeholder="B variantı">
+      <input id="answerC" placeholder="C variantı">
+      <input id="answerD" placeholder="D variantı">
+      <input id="answerE" placeholder="E variantı">
+
+      <h3>✅ Düzgün cavab</h3>
+      <select id="correctOption">
+        <option value="A">A</option>
+        <option value="B">B</option>
+        <option value="C">C</option>
+        <option value="D">D</option>
+        <option value="E">E</option>
+      </select>
+
+    </div>
+
+    <div id="writtenFields" style="display:none;">
+      <h3>✅ Düzgün cavab (yazılı)</h3>
+      <input id="correctWritten" placeholder="Düzgün cavabı yaz">
+    </div>
+
+    <h3>💡 Yazılı izah</h3>
+    <textarea id="explainText" rows="3" placeholder="Səhv cavab versə göstəriləcək izah"></textarea>
+
+    <h3>🎬 İzah videosu (istəyə bağlı)</h3>
+    <input id="explainVideo" placeholder="YouTube Embed linki">
+
+    <button id="questionSubmitBtn" onclick="addQuestion()">📝 Sual əlavə et</button>
+    <button id="cancelEditBtn" onclick="cancelEditQuestion()" style="display:none; background:#999;">✖ Ləğv et</button>
+    <p id="questionMessage"></p>
+
+    <h3 style="margin-top:24px;">📋 Mövcud suallar (seçilmiş mövzu üzrə)</h3>
+    <div id="questionsListContainer" style="margin-top:8px;">
+      <p>Yüklənir...</p>
+    </div>
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-client.js"></script>
+  <script src="js/admin.js"></script>
+
+  <script src="js/footer.js"></script>
+</body>
+</html>

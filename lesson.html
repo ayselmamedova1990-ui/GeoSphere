@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GeoSphere - Dərs</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+  <header class="header">
+    <div class="brand"><img src="images/logo.png" class="logo-icon" alt="GeoSphere"> GeoSphere</div>
+    <a href="javascript:history.back()" class="home-btn">⬅ Geri</a>
+  </header>
+
+  <div class="lesson-container">
+
+    <h1 id="lessonTitle">Dərsin adı</h1>
+
+    <div class="video">
+      <h2>🎬 Dərs videosu</h2>
+      <div id="player"></div>
+    </div>
+
+    <div class="pdf-section">
+      <h2>📄 Dərs materialları</h2>
+      <div id="pdfList">
+        <p>Hələ PDF əlavə edilməyib.</p>
+      </div>
+    </div>
+
+    <div class="test-section">
+      <button class="test-btn" onclick="goToTest()">📝 Testə başla</button>
+    </div>
+
+  </div>
+
+  <!-- YouTube IFrame API -->
+  <script src="https://www.youtube.com/iframe_api"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-client.js"></script>
+  <script src="js/lesson.js"></script>
+
+  <script src="js/footer.js"></script>
+</body>
+</html>

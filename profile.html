@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GeoSphere - Profilim</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+  <header class="header">
+    <div class="brand"><img src="images/logo.png" class="logo-icon" alt="GeoSphere"> GeoSphere</div>
+    <a href="home.html" class="home-btn">🏠 Ana səhifə</a>
+  </header>
+
+  <div class="lesson-container">
+
+    <h1>👤 Profilim</h1>
+
+    <div style="background:white; border-radius:12px; padding:20px; margin-bottom:20px; box-shadow:0 2px 10px rgba(0,0,0,0.06);">
+      <p><strong>Ad Soyad:</strong> <span id="profileName">—</span></p>
+      <p><strong>İstifadəçi adı:</strong> <span id="profileUsername">—</span></p>
+    </div>
+
+    <h2>📊 Mənim nəticələrim</h2>
+    <div id="myStats" style="margin-top:14px;">
+      <p>Yüklənir...</p>
+    </div>
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-client.js"></script>
+  <script src="js/profile.js"></script>
+
+  <script src="js/footer.js"></script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GeoSphere - Giriş</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+  <header class="hero-header">
+    <div class="brand-center">
+      <img src="images/logo.png" alt="GeoSphere">
+      <span>GeoSphere</span>
+    </div>
+  </header>
+
+  <div class="login-container">
+
+    <div class="login-box">
+
+      <h2>Giriş</h2>
+
+      <input type="text" id="username" placeholder="İstifadəçi adı">
+
+      <input type="password" id="password" placeholder="Şifrə">
+
+      <button onclick="login()">Daxil ol</button>
+
+      <p id="loginMessage" style="color:#c0392b; font-size:0.85rem; text-align:center; margin-top:4px;"></p>
+
+    </div>
+
+  </div>
+
+  <!-- Supabase kitabxanası (internetdən yüklənir, quraşdırmaq lazım deyil) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-client.js"></script>
+  <script src="js/login.js"></script>
+
+  <script src="js/footer.js"></script>
+</body>
+</html>

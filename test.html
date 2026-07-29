@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GeoSphere Test</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+  <header class="header">
+    <div class="brand"><img src="images/logo.png" class="logo-icon" alt="GeoSphere"> GeoSphere Test</div>
+    <a href="javascript:history.back()" class="home-btn">⬅ Geri</a>
+  </header>
+
+  <div class="lesson-container">
+
+    <h1 id="testTitle">Test</h1>
+
+    <div id="quiz"></div>
+
+    <button onclick="submitTest()" style="margin: 20px 0; background:#1565c0; color:white; border:none; padding:12px 22px; border-radius:8px; font-size:1rem; cursor:pointer;">
+      ✅ Nəticəni göstər
+    </button>
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-client.js"></script>
+  <script src="js/test.js"></script>
+
+  <script src="js/footer.js"></script>
+</body>
+</html>

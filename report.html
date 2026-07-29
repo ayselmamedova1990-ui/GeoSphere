@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GeoSphere - Hesabat</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    @media print {
+      .no-print { display: none; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="header no-print">
+    <div class="brand"><img src="images/logo.png" class="logo-icon" alt="GeoSphere"> GeoSphere - Hesabat</div>
+    <div>
+      <button onclick="sendWhatsapp()" style="background:#25D366; color:white; border:none; padding:8px 14px; border-radius:6px; cursor:pointer;">📤 WhatsApp ilə göndər</button>
+      <button onclick="sendEmail()" style="background:#4285F4; color:white; border:none; padding:8px 14px; border-radius:6px; cursor:pointer;">✉️ Email ilə göndər</button>
+      <button onclick="window.print()" style="background:#1565c0; color:white; border:none; padding:8px 14px; border-radius:6px; cursor:pointer;">🖨️ Çap et / PDF saxla</button>
+      <a href="teacher.html" class="home-btn">⬅ Geri</a>
+    </div>
+  </header>
+
+  <div class="lesson-container" id="reportContainer">
+    <p>Yüklənir...</p>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-client.js"></script>
+  <script src="js/report.js"></script>
+
+  <script src="js/footer.js"></script>
+</body>
+</html>

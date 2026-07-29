@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GeoSphere - Müəllim Paneli</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+  <header class="header">
+    <div class="brand"><img src="images/logo.png" class="logo-icon" alt="GeoSphere"> GeoSphere - Müəllim Paneli</div>
+    <div>
+      <a href="admin.html" class="home-btn">📚 Dərs/Test əlavə et</a>
+      <a href="index.html" class="home-btn" onclick="sessionStorage.clear()">Çıxış</a>
+    </div>
+  </header>
+
+  <div class="teacher-box">
+
+    <h1>👥 Şagird idarəetməsi</h1>
+
+    <h3>Ad Soyad</h3>
+    <input id="newFullName" placeholder="Şagirdin adı və soyadı">
+
+    <h3>İstifadəçi adı</h3>
+    <input id="newUsername" placeholder="Məsələn: elvin23">
+
+    <h3>Şifrə</h3>
+    <input id="newPassword" placeholder="Şagird üçün şifrə təyin et">
+
+    <button onclick="addStudent()">➕ Şagird əlavə et</button>
+
+    <p id="addMessage"></p>
+
+    <hr>
+
+    <h2>📋 Şagirdlərin siyahısı</h2>
+
+    <table id="studentsTable" style="width:100%; border-collapse: collapse; margin-top: 14px;">
+      <thead>
+        <tr style="text-align:left; border-bottom: 2px solid #eee;">
+          <th style="padding:8px;">Ad Soyad</th>
+          <th style="padding:8px;">İstifadəçi adı</th>
+          <th style="padding:8px;">Status</th>
+          <th style="padding:8px;">Əməliyyat</th>
+        </tr>
+      </thead>
+      <tbody id="studentsBody">
+        <tr><td colspan="4" style="padding:8px;">Yüklənir...</td></tr>
+      </tbody>
+    </table>
+
+    <hr>
+
+    <h2>📊 Şagirdlərin nəticələri</h2>
+
+    <table style="width:100%; border-collapse: collapse; margin-top: 14px;">
+      <thead>
+        <tr style="text-align:left; border-bottom: 2px solid #eee;">
+          <th style="padding:8px;">Sıra</th>
+          <th style="padding:8px;">Ad Soyad</th>
+          <th style="padding:8px;">Test nəticəsi</th>
+          <th style="padding:8px;">Video izləmə</th>
+          <th style="padding:8px;">Detallar</th>
+        </tr>
+      </thead>
+      <tbody id="statsBody">
+        <tr><td colspan="5" style="padding:8px;">Yüklənir...</td></tr>
+      </tbody>
+    </table>
+
+    <div id="detailsPanel"></div>
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-client.js"></script>
+  <script src="js/teacher.js"></script>
+
+  <script src="js/footer.js"></script>
+</body>
+</html>

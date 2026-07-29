@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GeoSphere - Ana səhifə</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+  <header class="hero-header">
+    <div class="brand-center">
+      <img src="images/logo.png" alt="GeoSphere">
+      <span>GeoSphere</span>
+    </div>
+    <div class="nav-right">
+      <a href="profile.html">👤 Profilim</a>
+      <a href="index.html" onclick="sessionStorage.clear()">Çıxış</a>
+    </div>
+  </header>
+
+  <div class="welcome">
+    <h1 id="welcomeText">🌍 GeoSphere-ə xoş gəlmisiniz</h1>
+    <p>Coğrafiyanı bizimlə öyrənin və biliklərinizi yoxlayın.</p>
+  </div>
+
+  <section class="topics">
+    <h2>📚 Bölmələr</h2>
+    <div class="cards" id="sectionsContainer">
+      <p>Yüklənir...</p>
+    </div>
+  </section>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-client.js"></script>
+  <script src="js/home.js"></script>
+
+  <script src="js/footer.js"></script>
+</body>
+</html>
