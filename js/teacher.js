@@ -79,6 +79,7 @@ async function loadStudents() {
       <td style="padding:8px;">
         <button onclick="toggleActive('${student.id}', ${student.is_active})">${actionText}</button>
         <button onclick="resetPassword('${student.id}')">🔑 Şifrəni sıfırla</button>
+        <button onclick="deleteStudent('${student.id}', '${student.full_name.replace(/'/g, "\\'")}')" style="background:#c0392b; color:white;">🗑️ Sil</button>
       </td>
     `;
     tbody.appendChild(row);
@@ -117,6 +118,26 @@ async function resetPassword(studentId) {
   }
 
   alert("✅ Şifrə uğurla yeniləndi. Yeni şifrəni şagirdə söylə: " + newPassword);
+}
+
+async function deleteStudent(studentId, studentName) {
+  const confirmDelete = window.confirm(
+    `${studentName} adlı şagirdi sistemdən tamamilə silmək istədiyinə əminsən? Bu şagirdin bütün video izləmə və test məlumatları da silinəcək. Bu əməliyyat geri qaytarılmır!`
+  );
+  if (!confirmDelete) return;
+
+  const { error } = await supabaseClient.rpc("delete_student", {
+    p_student_id: studentId
+  });
+
+  if (error) {
+    alert("Xəta baş verdi: " + error.message);
+    console.error(error);
+    return;
+  }
+
+  loadStudents();
+  loadStats();
 }
 
 // Səhifə açılanda şagird siyahısını yüklə
@@ -189,7 +210,12 @@ async function loadStats() {
   }
 
   // Reytinq: test nəticəsinə görə sırala (yüksəkdən aşağıya, olmayanlar sona)
-  statsList.sort((a, b) => (b.testPercent ?? -1) - (a.testPercent ?? -1));
+  statsList.sort((a, b) => {
+    if (a.student.is_active !== b.student.is_active) {
+      return (b.student.is_active ? 1 : 0) - (a.student.is_active ? 1 : 0);
+    }
+    return (b.testPercent ?? -1) - (a.testPercent ?? -1);
+  });
 
   tbody.innerHTML = "";
 
