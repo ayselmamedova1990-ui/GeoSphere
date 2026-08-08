@@ -24,6 +24,11 @@
     <button onclick="createSection()">📁 Bölmə yarat</button>
     <p id="sectionMessage"></p>
 
+    <h3 style="margin-top:24px;">📋 Mövcud bölmələr</h3>
+    <div id="sectionsListContainer" style="margin-top:8px;">
+      <p>Yüklənir...</p>
+    </div>
+
     <hr>
 
     <h1>📚 Yeni Mövzu Yarat</h1>
@@ -42,7 +47,8 @@
     <h3>📄 PDF materialı</h3>
     <input type="file" id="lessonPdf" accept="application/pdf">
 
-    <button onclick="createLesson()">📚 Mövzunu yarat</button>
+    <button id="lessonSubmitBtn" onclick="createLesson()">📚 Mövzunu yarat</button>
+    <button id="lessonCancelEditBtn" onclick="cancelEditLesson()" style="display:none; background:#999;">✖ Ləğv et</button>
     <p id="lessonMessage"></p>
 
     <h3 style="margin-top:24px;">📋 Mövcud mövzular</h3>

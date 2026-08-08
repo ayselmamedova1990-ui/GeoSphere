@@ -29,6 +29,90 @@ async function createSection() {
   messageEl.textContent = "✅ Bölmə uğurla yaradıldı.";
   document.getElementById("sectionName").value = "";
   loadSectionsDropdown();
+  loadSectionsList();
+}
+
+// ---------- Mövcud bölmələrin siyahısı (sil / adını dəyiş) ----------
+async function loadSectionsList() {
+  const container = document.getElementById("sectionsListContainer");
+  container.innerHTML = "<p>Yüklənir...</p>";
+
+  const { data, error } = await supabaseClient
+    .from("sections")
+    .select("*")
+    .order("created_at", { ascending: true });
+
+  if (error) {
+    container.innerHTML = "<p>Xəta baş verdi.</p>";
+    console.error(error);
+    return;
+  }
+
+  if (!data || data.length === 0) {
+    container.innerHTML = "<p>Hələ bölmə yoxdur.</p>";
+    return;
+  }
+
+  container.innerHTML = "";
+
+  data.forEach((section) => {
+    const row = document.createElement("div");
+    row.style.display = "flex";
+    row.style.justifyContent = "space-between";
+    row.style.alignItems = "center";
+    row.style.padding = "8px 0";
+    row.style.borderBottom = "1px solid #eee";
+    row.innerHTML = `
+      <span>📁 ${section.name}</span>
+      <span>
+        <button onclick="renameSection('${section.id}', '${section.name.replace(/'/g, "\\'")}')">✏️ Adını dəyiş</button>
+        <button onclick="deleteSection('${section.id}')">🗑️ Sil</button>
+      </span>
+    `;
+    container.appendChild(row);
+  });
+}
+
+async function renameSection(sectionId, currentName) {
+  const newName = window.prompt("Yeni bölmə adı:", currentName);
+  if (!newName || newName.trim() === "") return;
+
+  const { error } = await supabaseClient
+    .from("sections")
+    .update({ name: newName.trim() })
+    .eq("id", sectionId);
+
+  if (error) {
+    alert("Xəta baş verdi: " + error.message);
+    console.error(error);
+    return;
+  }
+
+  await loadSectionsList();
+  await loadSectionsDropdown();
+}
+
+async function deleteSection(sectionId) {
+  const confirmDelete = window.confirm(
+    "Bu bölməni silmək istədiyinə əminsən? Bu bölməyə aid BÜTÜN mövzular, suallar və şagird nəticələri də silinəcək. Bu əməliyyat geri qaytarılmır!"
+  );
+  if (!confirmDelete) return;
+
+  const { error } = await supabaseClient
+    .from("sections")
+    .delete()
+    .eq("id", sectionId);
+
+  if (error) {
+    alert("Xəta baş verdi: " + error.message);
+    console.error(error);
+    return;
+  }
+
+  await loadSectionsList();
+  await loadSectionsDropdown();
+  await loadLessonsList();
+  document.getElementById("questionsListContainer").innerHTML = "<p>Mövzu seç.</p>";
 }
 
 // ---------- Bölmələri dropdown-a yükləmək ----------
@@ -62,6 +146,8 @@ async function loadSectionsDropdown() {
 }
 
 // ---------- Mövzu (dərs) yaratmaq ----------
+let editingLessonId = null;
+
 async function createLesson() {
   const sectionId = document.getElementById("lessonSection").value;
   const title = document.getElementById("lessonName").value.trim();
@@ -83,9 +169,9 @@ async function createLesson() {
 
   messageEl.textContent = "Yüklənir, gözlə...";
 
-  let pdfUrl = null;
+  let pdfUrl = undefined; // undefined = köhnə PDF-ə toxunma (yeniləmə rejimində)
 
-  // Əgər PDF seçilibsə, Supabase Storage-a yüklə
+  // Əgər yeni PDF seçilibsə, Supabase Storage-a yüklə
   if (pdfFile) {
     const fileName = `pdf_${Date.now()}_${pdfFile.name}`;
 
@@ -106,18 +192,38 @@ async function createLesson() {
       .getPublicUrl(fileName);
 
     pdfUrl = urlData.publicUrl;
+  } else if (!editingLessonId) {
+    pdfUrl = null; // yeni yaratmada, PDF seçilməyibsə boş qalsın
   }
 
-  const { data: newLesson, error } = await supabaseClient
-    .from("lessons")
-    .insert({
+  let error, newLesson;
+
+  if (editingLessonId) {
+    // ---- Yeniləmə rejimi ----
+    const updatePayload = {
       section_id: sectionId,
       title: title,
-      video_url: videoUrl || null,
-      pdf_url: pdfUrl
-    })
-    .select()
-    .maybeSingle();
+      video_url: videoUrl || null
+    };
+    if (pdfUrl !== undefined) updatePayload.pdf_url = pdfUrl;
+
+    ({ error } = await supabaseClient
+      .from("lessons")
+      .update(updatePayload)
+      .eq("id", editingLessonId));
+  } else {
+    // ---- Yeni yaratma rejimi ----
+    ({ data: newLesson, error } = await supabaseClient
+      .from("lessons")
+      .insert({
+        section_id: sectionId,
+        title: title,
+        video_url: videoUrl || null,
+        pdf_url: pdfUrl
+      })
+      .select()
+      .maybeSingle());
+  }
 
   if (error) {
     messageEl.textContent = "Xəta baş verdi: " + error.message;
@@ -125,10 +231,10 @@ async function createLesson() {
     return;
   }
 
-  messageEl.textContent = "✅ Mövzu uğurla yaradıldı.";
-  document.getElementById("lessonName").value = "";
-  document.getElementById("lessonVideo").value = "";
-  document.getElementById("lessonPdf").value = "";
+  messageEl.textContent = editingLessonId ? "✅ Mövzu uğurla yeniləndi." : "✅ Mövzu uğurla yaradıldı.";
+
+  const wasEditing = editingLessonId;
+  cancelEditLesson();
 
   await loadLessonsDropdown();
   await loadLessonsList();
@@ -137,7 +243,52 @@ async function createLesson() {
   if (newLesson) {
     document.getElementById("questionLesson").value = newLesson.id;
     loadQuestionsListForLesson(newLesson.id);
+  } else if (wasEditing) {
+    document.getElementById("questionLesson").value = wasEditing;
+    loadQuestionsListForLesson(wasEditing);
   }
+}
+
+// ---------- Mövzunu redaktə üçün formaya yükləmək ----------
+async function editLesson(lessonId) {
+  const { data: lesson, error } = await supabaseClient
+    .from("lessons")
+    .select("*")
+    .eq("id", lessonId)
+    .maybeSingle();
+
+  if (error || !lesson) {
+    alert("Mövzu tapılmadı.");
+    console.error(error);
+    return;
+  }
+
+  editingLessonId = lesson.id;
+
+  document.getElementById("lessonSection").value = lesson.section_id;
+  document.getElementById("lessonName").value = lesson.title;
+  document.getElementById("lessonVideo").value = lesson.video_url || "";
+  document.getElementById("lessonPdf").value = "";
+
+  document.getElementById("lessonSubmitBtn").textContent = "💾 Mövzunu yenilə";
+  document.getElementById("lessonCancelEditBtn").style.display = "inline-block";
+
+  const pdfNote = lesson.pdf_url
+    ? `Hazırkı PDF: <a href="${lesson.pdf_url}" target="_blank">bax</a> (dəyişmək istəmirsənsə fayl seçmə)`
+    : "Hazırda PDF yoxdur";
+  document.getElementById("lessonMessage").innerHTML = pdfNote;
+
+  window.scrollTo({ top: document.querySelector(".admin-box").offsetTop, behavior: "smooth" });
+}
+
+function cancelEditLesson() {
+  editingLessonId = null;
+  document.getElementById("lessonSubmitBtn").textContent = "📚 Mövzunu yarat";
+  document.getElementById("lessonCancelEditBtn").style.display = "none";
+  document.getElementById("lessonName").value = "";
+  document.getElementById("lessonVideo").value = "";
+  document.getElementById("lessonPdf").value = "";
+  document.getElementById("lessonMessage").textContent = "";
 }
 
 // ---------- Mövcud mövzuların siyahısı (sil / adını dəyiş) ----------
@@ -173,7 +324,7 @@ async function loadLessonsList() {
     row.innerHTML = `
       <span>📖 ${lesson.title} <span style="color:#999; font-size:0.85rem;">(${lesson.sections ? lesson.sections.name : "?"})</span></span>
       <span>
-        <button onclick="renameLesson('${lesson.id}', '${lesson.title.replace(/'/g, "\\'")}')">✏️ Adını dəyiş</button>
+        <button onclick="editLesson('${lesson.id}')">✏️ Redaktə et</button>
         <button onclick="deleteLesson('${lesson.id}')">🗑️ Sil</button>
       </span>
     `;
@@ -224,6 +375,7 @@ async function deleteLesson(lessonId) {
 
 // Səhifə açılanda bölmələri yüklə
 loadSectionsDropdown();
+loadSectionsList();
 
 // ---------- Sual tipini dəyişəndə formanı uyğunlaşdırmaq ----------
 function toggleQuestionType() {
