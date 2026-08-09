@@ -173,7 +173,18 @@ async function createLesson() {
 
   // Əgər yeni PDF seçilibsə, Supabase Storage-a yüklə
   if (pdfFile) {
-    const fileName = `pdf_${Date.now()}_${pdfFile.name}`;
+    const safeName = pdfFile.name
+  .normalize("NFD")
+  .replace(/[\u0300-\u036f]/g, "")
+  .replace(/[əƏ]/g, "e")
+  .replace(/[ıI]/g, "i")
+  .replace(/[öÖ]/g, "o")
+  .replace(/[üÜ]/g, "u")
+  .replace(/[şŞ]/g, "s")
+  .replace(/[ğĞ]/g, "g")
+  .replace(/[çÇ]/g, "c")
+  .replace(/[^a-zA-Z0-9._-]/g, "_");
+const fileName = `pdf_${Date.now()}_${safeName}`;
 
     const { error: uploadError } = await supabaseClient
       .storage
