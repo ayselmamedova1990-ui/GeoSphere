@@ -24,9 +24,10 @@ async function loadTest() {
   }
 
   const { data, error } = await supabaseClient
-    .from("questions")
-    .select("*")
-    .eq("lesson_id", lessonId);
+  .from("questions")
+  .select("*")
+  .eq("lesson_id", lessonId)
+  .order("created_at", { ascending: true });
 
   if (error || !data || data.length === 0) {
     document.getElementById("quiz").innerHTML = "<p>Bu mövzu üçün hələ test yoxdur.</p>";
