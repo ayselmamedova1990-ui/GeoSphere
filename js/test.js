@@ -59,12 +59,12 @@ function renderQuestions() {
     if (q.question_type === "choice") {
       const options = { A: q.option_a, B: q.option_b, C: q.option_c, D: q.option_d, E: q.option_e };
       html += `<div>`;
-      for (const letter in options) {
+    for (const letter in options) {
         if (options[letter]) {
           html += `
             <label style="display:block; margin:8px 0; cursor:pointer;">
               <input type="radio" name="q_${q.id}" value="${letter}">
-              ${letter}) ${options[letter]}
+              ${letter}
             </label>
           `;
         }
