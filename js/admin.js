@@ -458,31 +458,14 @@ async function addQuestion() {
   };
 
   if (type === "choice") {
-    const a = document.getElementById("answerA").value.trim();
-    const b = document.getElementById("answerB").value.trim();
-    const c = document.getElementById("answerC").value.trim();
-    const d = document.getElementById("answerD").value.trim();
-    const e = document.getElementById("answerE").value.trim();
     const correct = document.getElementById("correctOption").value;
 
-    const options = { A: a, B: b, C: c, D: d, E: e };
-    const filledCount = Object.values(options).filter(v => v).length;
-
-    if (filledCount < 2) {
-      messageEl.textContent = "Ən azı 2 variant doldur.";
-      return;
-    }
-
-    if (!options[correct]) {
-      messageEl.textContent = "Düzgün cavab kimi seçdiyin variant boşdur, məzmun yaz.";
-      return;
-    }
-
-    payload.option_a = a;
-    payload.option_b = b;
-    payload.option_c = c;
-    payload.option_d = d;
-    payload.option_e = e;
+    // Şəkilli sual olduğu üçün mətn tələb olunmur — hərflər avtomatik doldurulur
+    payload.option_a = "A";
+    payload.option_b = "B";
+    payload.option_c = "C";
+    payload.option_d = "D";
+    payload.option_e = "E";
     payload.correct_option = correct;
   } else {
     const correctWritten = document.getElementById("correctWritten").value.trim();
